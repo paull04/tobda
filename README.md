@@ -40,9 +40,10 @@ We matched a image pixel (u,v,d) to a point cloud (x,y,z) of the real world base
 ![4](https://user-images.githubusercontent.com/67684178/134817263-60921c09-4b21-4c01-8edf-210c9eed0d1f.PNG)
 
 
-### **4\. Select points from image**
+### **4\. Select four points from image**
 
 To obtain the transformation matrix, the world coordinates of four points on any pixel must be calculated.
+Since an appropriate transformation matrix cannot be obtained by selecting a random 4 points, an algorithm was devised to capture the contour of the corridor area and to select the inner 4 points of the contour that fell off the contour.
 
 ![5](https://user-images.githubusercontent.com/67684178/134817318-9861625b-9a24-4e7b-9a3d-2d4789866d76.PNG)
 
