@@ -9,6 +9,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.clock import Clock
 import PIL.Image as Pimage
 import cv2
+from bird_view import imgTobird
 
 
 
@@ -69,6 +70,13 @@ class TouchPoint(Image):
             self.is_cam_on = False
             self.capture.release()
             self.event.cancel()
+            arr = imgTobird(self.arr)
+            newarr = np.empty([arr.shape[0], arr.shape[1], 3], dtype=np.uint8)
+            for x in range(newarr.shape[0]):
+                for y in range(newarr.shape[1]):
+                    p = newarr[x, y]
+                    p[0] = p[1] = p[2] = int(arr[x, y] * 255)
+            self.my_update(newarr)
 
         elif touch.is_double_tap:
             self.is_cam_on = True

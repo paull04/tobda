@@ -1,7 +1,5 @@
 import cv2
 import numpy as np
-from unet import Unet
-from midas import Midas
 from projection import Projection
 
 
@@ -28,21 +26,24 @@ def find_points(mask):
             points.append((y+100,i-20))
             break
     points.append((y+h-50,x+100))
+    points.append((y+h-50,x+w-100))
+    return points
 
 
 P = Projection(1000, 1000, 1000, 1000, 1)
 
 
-def warpBird(mask:np.ndarray,depth:np.ndarray,points:list):
+def warpBird(mask:np.ndarray, depth:np.ndarray, points:list):
     # find matrix for warping transform
     pts1 = [(point[1],point[0]) for point in points]
-    Pmask.shape[0] / 2, mask.shape[1] / 2
+    P.cx, P.cy = mask.shape[0] / 2, mask.shape[1] / 2
 
-    def f1(p):
-        x, y, z = P.match_point(p[0], p[1], depth=depth)
-        return 1100 - y, 2500 - z
-
-    pts2 = [f1 for point in points]
+    pts1, pts2 = [], []
+    for point in points:
+        pts1.append((point[1], point[0]))
+    for point in points:
+        x, y, z = P.match_point(point[0], point[1], depth=depth)
+        pts2.append((1100 - y, 2500 - z))
 
     pts1, pts2 = np.float32(pts1),np.float32(pts2)
     matrix = cv2.getPerspectiveTransform(pts1,pts2)
